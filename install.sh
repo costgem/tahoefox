@@ -20,7 +20,7 @@ usage() {
 Usage: ./install.sh [options]
 
   -p, --profile PATH   Install into this profile folder instead of the default one
-  -l, --link           Symlink the CSS files instead of copying them (handy while editing)
+  -l, --link           Link the CSS files instead of copying them (handy while editing)
   -u, --uninstall      Remove the theme and its preferences from the profile
       --no-migrate     Do not carry over existing gwfox.* preferences
   -n, --dry-run        Show what would happen without changing anything
@@ -158,7 +158,13 @@ install_theme() {
 
   for f in "${FILES[@]}"; do
     run rm -f "$chrome/$f"
-    if [[ "$mode" == "link" ]]; then
+    if [[ "$mode" == "link" && "$f" == "userContent.css" ]]; then
+      say "Hard-linking $f"
+      if ! run ln "$SRC_DIR/$f" "$chrome/$f"; then
+        say "Could not hard-link $f, copying it instead"
+        run cp "$SRC_DIR/$f" "$chrome/$f"
+      fi
+    elif [[ "$mode" == "link" ]]; then
       say "Linking $f"
       run ln -s "$SRC_DIR/$f" "$chrome/$f"
     else

@@ -28,7 +28,7 @@ The script finds your default profile, backs up its `chrome` folder once, copies
 | Option | What it does |
 | :--- | :--- |
 | `--profile PATH` | Use another profile (see `about:profiles` for the paths) |
-| `--link` | Symlink the CSS instead of copying it, so edits in this folder show up after a Firefox restart |
+| `--link` | Link the CSS instead of copying it, so edits in this folder show up after a Firefox restart. `userContent.css` gets a hard link, because Firefox's content sandbox will not follow a symlink out of the profile; if git replaces that file, run `--link` again |
 | `--uninstall` | Remove the theme, restore the original `chrome` folder and drop the preferences from `user.js` |
 | `--no-migrate` | Do not carry over `gwfox.*` switches |
 | `--dry-run` | Print what would happen without touching anything |
@@ -58,6 +58,8 @@ The script finds your default profile, backs up its `chrome` folder once, copies
 <img alt="Favorites in the empty address bar" src="docs/favorites.png" width="49%">
 </p>
 
+Favorites are the shortcuts you pin: right-click a tile and choose Pin, or add one with the + tile. Sites Firefox picks from your history go under Frequently Visited, below them.
+
 ## Customization
 
 ### Tahoefox switches
@@ -85,8 +87,9 @@ The top of the Tahoefox section in `userChrome.css` has a small block of variabl
 ```css
 :root {
   --tahoefox-toolbar-color: light-dark(#efeeed, #302e2d);
-  --tahoefox-tabbar-color: light-dark(rgba(0, 0, 0, .06), rgba(170, 170, 170, .2));
+  --tahoefox-tabbar-color: light-dark(rgba(0, 0, 0, .08), rgba(170, 170, 170, .2));
   --tahoefox-tab-selected-color: light-dark(#fff, rgba(170, 170, 170, .1));
+  --tahoefox-tab-selected-shadow: 0 1px 3px light-dark(rgba(0, 0, 0, .18), rgba(0, 0, 0, .3)), 0 0 0 .5px light-dark(rgba(0, 0, 0, .1), transparent), inset 0 0 0 .5px light-dark(transparent, rgba(255, 255, 255, .1)), inset 0 1px 0 light-dark(transparent, rgba(255, 255, 255, .12));
   --tahoefox-urlbar-max-width: 710px;
   --tahoefox-urlbar-width: 41vw;
   --tahoefox-tab-height: 31px;

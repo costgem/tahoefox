@@ -1281,6 +1281,9 @@ main {
 html:lang(ru) .top-sites-list-wrapper::before {
   content: "Избранное";
 }
+.top-sites-list-wrapper:not(:has(.title.pinned, .add-button-tile))::before {
+  display: none;
+}
 .top-sites-list {
   display: grid !important;
   width: 100% !important;
@@ -1288,6 +1291,24 @@ html:lang(ru) .top-sites-list-wrapper::before {
   justify-content: start !important;
   gap: 14px 21px !important;
   margin: 0 !important;
+}
+.top-sites-list > li:not(.add-button-tile, :has(.title.pinned)) {
+  order: 2;
+}
+.top-sites-list:has(> .top-site-outer:not(.add-button-tile, .placeholder, :has(.title.pinned, .title.sponsored)))::before {
+  content: "Frequently Visited";
+  order: 1;
+  grid-column: 1 / -1;
+  margin-block: 18px 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: light-dark(#1d1d1f, #f5f5f7);
+}
+html:lang(ru) .top-sites-list:has(> .top-site-outer:not(.add-button-tile, .placeholder, :has(.title.pinned, .title.sponsored)))::before {
+  content: "Часто посещаемые";
+}
+.top-sites-list-wrapper:not(:has(.title.pinned, .add-button-tile)) .top-sites-list.top-sites-list::before {
+  margin-block-start: 0;
 }
 .top-site-outer {
   width: 72px !important;
@@ -1318,6 +1339,11 @@ html:lang(ru) .top-sites-list-wrapper::before {
   height: 100% !important;
   background-size: contain !important;
 }
+.top-site-outer .tile .icon-wrapper > .top-site-icon.default-icon {
+  width: 32px !important;
+  height: 32px !important;
+  margin: auto !important;
+}
 .top-site-outer .title {
   padding-block-start: 6px !important;
   font-size: 12px !important;
@@ -1344,6 +1370,33 @@ html:lang(ru) .top-sites-list-wrapper::before {
   margin: 0 !important;
   clip-path: none !important;
 }
+.top-sites-list .top-site-outer .context-menu-button.icon {
+  background-color: light-dark(rgba(255, 255, 255, .92), rgba(72, 72, 74, .92)) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .2) !important;
+  backdrop-filter: blur(10px) !important;
+&:hover {
+  background-color: light-dark(#fff, rgba(88, 88, 90, .95)) !important;
+}
+&:active {
+  background-color: light-dark(#ececec, rgba(60, 60, 62, .95)) !important;
+}
+}
+.add-button-hidden {
+  inset-block-start: 36px !important;
+  inset-inline-start: calc(100% + 21px) !important;
+  width: 72px !important;
+}
+.add-button-hidden .add-button {
+  --button-background-color-primary: light-dark(rgba(0, 0, 0, .06), rgba(255, 255, 255, .14)) !important;
+  --button-background-color-primary-hover: light-dark(rgba(0, 0, 0, .1), rgba(255, 255, 255, .22)) !important;
+  --button-background-color-primary-active: light-dark(rgba(0, 0, 0, .1), rgba(255, 255, 255, .22)) !important;
+  --button-border-color-primary: transparent !important;
+  --button-border-color-primary-hover: transparent !important;
+  --button-border-color-primary-active: transparent !important;
+  --button-text-color-primary: light-dark(#1d1d1f, #f5f5f7) !important;
+  --button-text-color-primary-hover: light-dark(#1d1d1f, #f5f5f7) !important;
+  --button-text-color-primary-active: light-dark(#1d1d1f, #f5f5f7) !important;
+}
 .personalizeButtonWrapper {
   inset-block-end: 12px !important;
   inset-inline-end: 20px !important;
@@ -1369,6 +1422,114 @@ html:lang(ru) .top-sites-list-wrapper::before {
 }
 html:lang(ru) .personalize-button::after {
   content: "Изменить";
+}
+.modalOverlayOuter {
+  border-radius: 20px !important;
+  background-color: light-dark(rgba(246, 246, 246, .97), rgba(42, 42, 44, .97)) !important;
+  backdrop-filter: blur(30px) !important;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, .25), 0 0 0 .5px light-dark(rgba(0, 0, 0, .12), rgba(255, 255, 255, .12)) !important;
+}
+.modalOverlayOuter:has(.topsite-form) {
+  width: min(500px, 100vw - 48px) !important;
+  overflow: hidden !important;
+> .modal {
+  width: auto !important;
+  min-height: 0 !important;
+}
+}
+.topsite-form {
+  font-size: 13px !important;
+.form-input-container {
+  max-width: none !important;
+  padding: 22px 24px 6px !important;
+}
+.section-title {
+  margin: 0 0 18px !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+}
+.fields-and-preview {
+  flex-direction: row !important;
+  align-items: flex-start !important;
+  gap: 20px;
+}
+.fields-and-preview .top-site-outer {
+  order: -1;
+  flex: none;
+  margin: 0 !important;
+&:not(:has([style*="url("])) {
+  display: none !important;
+}
+}
+label {
+  font-size: 12px !important;
+  font-weight: 500;
+  color: light-dark(rgba(0, 0, 0, .55), rgba(255, 255, 255, .55));
+}
+.form-wrapper input[type=text] {
+  appearance: none !important;
+  box-sizing: border-box !important;
+  height: 30px !important;
+  margin: 4px 0 12px !important;
+  padding: 0 10px !important;
+  border: none !important;
+  border-radius: 8px !important;
+  outline: none !important;
+  box-shadow: inset 0 0 0 .5px light-dark(rgba(0, 0, 0, .12), rgba(255, 255, 255, .1)) !important;
+  background: light-dark(#fff, rgba(255, 255, 255, .08)) !important;
+  font-size: 13px !important;
+  transition: box-shadow .15s !important;
+&:focus {
+  outline: none !important;
+  box-shadow: 0 0 0 3.5px var(--focus-outline-color) !important;
+}
+}
+.form-wrapper .invalid input[type=text] {
+  box-shadow: 0 0 0 3.5px light-dark(rgba(215, 0, 21, .4), rgba(255, 69, 58, .5)) !important;
+}
+.topsite-form-footer {
+  padding: 10px 24px 20px !important;
+}
+.enable-custom-image-input {
+  font-size: 13px !important;
+}
+.actions moz-button {
+  --button-border-radius: 15px !important;
+  --button-min-height: 30px !important;
+  --button-padding: 0 18px !important;
+  --button-font-size: 13px !important;
+  --button-font-weight: 500 !important;
+}
+.actions moz-button + moz-button {
+  margin-inline-start: 10px !important;
+}
+}
+.customize-menu {
+  height: auto !important;
+  max-height: calc(100vh - 44px) !important;
+  border-radius: 20px !important;
+}
+.customize-menu-content {
+  height: auto !important;
+}
+.customize-menu, .customize-menu-content, .wallpaper-list.category, .modalOverlayOuter {
+  scrollbar-width: thin;
+  scrollbar-color: light-dark(rgba(0, 0, 0, .3), rgba(255, 255, 255, .3)) transparent;
+}
+.wallpapers-reset {
+  font-size: 13px !important;
+  text-decoration: none !important;
+  color: var(--color-accent-primary) !important;
+&:hover {
+  text-decoration: underline !important;
+}
+}
+.category-header h2 {
+  font-size: 15px !important;
+  font-weight: 600 !important;
+}
+.wallpaper-input {
+  border-radius: 12px !important;
 }
 }
 }
