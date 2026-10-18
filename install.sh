@@ -132,15 +132,42 @@ migrated_prefs() {
     sed -E 's/^user_pref\("gwfox\./user_pref("tahoefox./' || true
 }
 
+block_prefs() {
+  local file="$1/user.js"
+  [[ -f "$file" ]] || return 0
+  awk -v b="$BLOCK_BEGIN" -v e="$BLOCK_END" '
+    index($0, b) == 1 { inside = 1; next }
+    $0 == e { inside = 0; next }
+    inside && /^user_pref\("tahoefox\./
+  ' "$file"
+}
+
+carry_over_prefs() {
+  local dir="$1" prefs="$1/prefs.js" lines line name seen=" "
+  lines="$(block_prefs "$dir"; migrated_prefs "$dir")"
+  [[ -n "$lines" ]] || return 0
+  while IFS= read -r line; do
+    name="${line#user_pref(\"}"
+    name="${name%%\"*}"
+    [[ "$seen" == *" $name "* ]] && continue
+    seen+="$name "
+    if [[ -f "$prefs" ]] && grep -qF "user_pref(\"$name\"," "$prefs"; then
+      continue
+    fi
+    say "Setting $name in prefs.js"
+    if [[ $dry_run -eq 0 ]]; then
+      printf '%s\n' "$line" >> "$prefs"
+    fi
+  done <<< "$lines"
+}
+
 pref_block() {
-  local dir="$1"
   say "$BLOCK_BEGIN"
   say 'user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);'
   say 'user_pref("svg.context-properties.content.enabled", true);'
   if [[ "$(uname -s)" == "Darwin" ]]; then
     say 'user_pref("widget.macos.native-context-menus", false);'
   fi
-  migrated_prefs "$dir"
   say "$BLOCK_END"
 }
 
@@ -149,7 +176,7 @@ install_theme() {
   stamp="$(date +%Y%m%d-%H%M%S)"
 
   if [[ -d "$chrome" ]] && find "$chrome" -mindepth 1 -maxdepth 1 | grep -q . &&
-    ! grep -qs "Tahoefox:" "$chrome/userChrome.css"; then
+    ! compgen -G "$dir/chrome.${NAME}-backup-*" >/dev/null; then
     backup="$dir/chrome.${NAME}-backup-$stamp"
     say "Backing up the current chrome folder to $(basename "$backup")"
     run cp -R "$chrome" "$backup"
@@ -173,13 +200,15 @@ install_theme() {
     fi
   done
 
+  carry_over_prefs "$dir"
+
   say "Writing preferences to user.js"
   if [[ $dry_run -eq 1 ]]; then
-    pref_block "$dir" | sed 's/^/  [dry run] /'
+    pref_block | sed 's/^/  [dry run] /'
   else
     local tmp
     tmp="$(mktemp)"
-    { strip_block "$dir/user.js"; pref_block "$dir"; } > "$tmp"
+    { strip_block "$dir/user.js"; pref_block; } > "$tmp"
     mv "$tmp" "$dir/user.js"
   fi
 }

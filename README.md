@@ -23,7 +23,7 @@ Quit Firefox, then run from the project folder:
 ./install.sh
 ```
 
-The script finds your default profile, backs up its `chrome` folder once, copies the theme in and writes the preferences Tahoefox needs to `user.js`. If you used gwfox before, your `gwfox.*` switches are carried over as `tahoefox.*`.
+The script finds your default profile, backs up its `chrome` folder the first time, copies the theme in and writes the three preferences Tahoefox needs to its own block in `user.js`. Other files in `chrome`, other lines in `user.js` and your `about:config` settings are left alone. If you used gwfox before, your `gwfox.*` switches are carried over once as `tahoefox.*` in `about:config`, so you can still change them there.
 
 | Option | What it does |
 | :--- | :--- |
