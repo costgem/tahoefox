@@ -3396,6 +3396,16 @@ menuitem[type="radio"][disabled] .menu-icon {
   --tahoefox-tab-height: 31px;
   --tahoefox-tab-radius: 10px;
   --tahoefox-dropdown-radius: 16px;
+  --tahoefox-toolbar-inset: 8px;
+}
+
+@media -moz-pref("tahoefox.atbc") {
+:root[lwt-toolbar="light"] #navigator-toolbox {
+  color-scheme: light;
+}
+:root[lwt-toolbar="dark"] #navigator-toolbox {
+  color-scheme: dark;
+}
 }
 
 menupopup :is(menu, menuitem)[_moz-menuactive]:not([disabled]) {
@@ -3749,6 +3759,17 @@ menupopup :is(menu, menuitem)[_moz-menuactive]:not([disabled]) {
   padding-left: 96px !important;
 }
 }
+&[inFullscreen] #nav-bar {
+  padding-left: var(--tahoefox-toolbar-inset) !important;
+}
+}
+
+@media not (-moz-platform: macos) {
+@media not -moz-pref("tahoefox.mwc") {
+#nav-bar {
+  padding-left: var(--tahoefox-toolbar-inset) !important;
+}
+}
 }
 
 #urlbar :is(.urlbar-page-action, .identity-box-button, #trust-icon-container, #notification-popup-box, .urlbar-go-button),
@@ -3881,7 +3902,7 @@ menupopup :is(menu, menuitem)[_moz-menuactive]:not([disabled]) {
 #tabbrowser-tabs {
   order: 1;
   flex: 1 1 100% !important;
-  margin: 0 8px 7px !important;
+  margin: 0 var(--tahoefox-toolbar-inset) 7px !important;
 }
 
 @media not -moz-pref("tahoefox.tabs.always") {

@@ -95,6 +95,7 @@ The top of the Tahoefox section in `userChrome.css` has a small block of variabl
   --tahoefox-tab-height: 31px;
   --tahoefox-tab-radius: 10px;
   --tahoefox-dropdown-radius: 16px;
+  --tahoefox-toolbar-inset: 8px;
 }
 ```
 
