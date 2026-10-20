@@ -3663,6 +3663,10 @@ menupopup :is(menu, menuitem)[_moz-menuactive]:not([disabled]) {
   padding-inline-end: 30px !important;
 }
 
+#nav-bar #urlbar #remote-control-box {
+  order: 1;
+}
+
 #nav-bar :is(#back-button, #forward-button),
 #TabsToolbar :is(#new-tab-button, #alltabs-button), #PanelUI-menu-button {
   --pill-edge: light-dark(rgba(0, 0, 0, .06), rgba(255, 255, 255, .08));
@@ -3718,7 +3722,7 @@ menupopup :is(menu, menuitem)[_moz-menuactive]:not([disabled]) {
   display: none !important;
 }
 @media not -moz-pref("tahoefox.toolbar.extensions") {
-#unified-extensions-button { display: none !important; }
+&:not(:has(#overflowed-extensions-list > *)) #unified-extensions-button { display: none !important; }
 }
 @media not -moz-pref("tahoefox.toolbar.sidebar") {
 #sidebar-button { display: none !important; }
@@ -3752,23 +3756,23 @@ menupopup :is(menu, menuitem)[_moz-menuactive]:not([disabled]) {
 }
 }
 
+#nav-bar {
+  --navbar-start: var(--tahoefox-toolbar-inset);
+  padding-left: var(--navbar-start) !important;
+}
+
 @media (-moz-platform: macos) {
 &:not([inFullscreen]) #nav-bar {
-  padding-left: 90px !important;
+  --navbar-start: 90px;
 @media (-moz-mac-tahoe-theme) {
-  padding-left: 96px !important;
+  --navbar-start: 96px;
 }
-}
-&[inFullscreen] #nav-bar {
-  padding-left: var(--tahoefox-toolbar-inset) !important;
 }
 }
 
-@media not (-moz-platform: macos) {
-@media not -moz-pref("tahoefox.mwc") {
+@media (not (-moz-platform: macos)) and -moz-pref("tahoefox.mwc") {
 #nav-bar {
-  padding-left: var(--tahoefox-toolbar-inset) !important;
-}
+  --navbar-start: 74px;
 }
 }
 
@@ -3887,6 +3891,16 @@ menupopup :is(menu, menuitem)[_moz-menuactive]:not([disabled]) {
 }
 
 &:not([customizing]) {
+#nav-bar-customization-target {
+  max-width: max(0px, 50vw - var(--urlbar-width) / 2 - var(--navbar-start) - var(--tahoefox-toolbar-inset));
+> :is(toolbarbutton, toolbaritem) {
+  flex-shrink: 0;
+}
+}
+#PanelUI-button {
+  margin-inline-start: auto !important;
+}
+
 #nav-bar #back-button[disabled],
 #nav-bar #forward-button[disabled] {
   display: flex !important;
@@ -3994,7 +4008,11 @@ menupopup :is(menu, menuitem)[_moz-menuactive]:not([disabled]) {
   position: relative;
   justify-content: center;
 }
+&:hover:not([movingtab] *) .tab-content {
+  padding-inline: calc(var(--tab-content-button-size) + 11px) !important;
+}
 .tab-label-container {
+  min-width: 0;
   max-width: max-content;
   margin-inline: 0 !important;
 }
