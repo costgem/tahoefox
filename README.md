@@ -34,6 +34,20 @@ The script finds your default profile, backs up its `chrome` folder the first ti
 | `--dry-run` | Print what would happen without touching anything |
 | `--force` | Run even if Firefox looks open |
 
+### With the script (Windows)
+
+Quit Firefox, then run from the project folder in PowerShell:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\install.ps1
+```
+
+It does the same as `install.sh` and also turns on Mica (`widget.windows.mica` and `widget.windows.mica.toplevel-backdrop`). It finds the profile of both the regular and the Microsoft Store Firefox. The options are `-ProfilePath PATH`, `-Link`, `-Uninstall`, `-NoMigrate`, `-DryRun` and `-Force`. With `-Link`, `userChrome.css` gets a symbolic link if Windows allows it (Developer Mode or an administrator shell) and a hard link otherwise.
+
+### Updating
+
+Get the new version of the project folder (`git pull`, or download it again), quit Firefox and run the script again, the same way you installed. It replaces the CSS files with the new ones and rewrites its block in `user.js`. Your `tahoefox.*` switches and the backup made at the first install are kept, but changes you made to the installed `userChrome.css` itself, such as the variables, are overwritten, so make them again or keep them in the project folder. If you installed with `--link`/`-Link`, `userChrome.css` updates by itself; run the script with `--link`/`-Link` again so `userContent.css` picks up the new file.
+
 ### By hand (any platform)
 
 1. Copy `userChrome.css` and `userContent.css` into the `chrome` folder of your profile (create it if needed; `about:support` → Profile Folder shows where the profile lives).
